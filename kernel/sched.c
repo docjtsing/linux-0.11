@@ -50,7 +50,7 @@ void show_stat(void)
 }
 
 // PC机8253定时芯片的输入时钟频率约为1.193180MHz. Linux内核希望定时器发出中断的频率是
-// 100Hz，也即没10ms发出一次时钟中断。因此这里的LATCH是设置8253芯片的初值。
+// 100Hz，也即每10ms发出一次时钟中断。因此这里的LATCH是设置8253芯片的初值。
 #define LATCH (1193180/HZ)
 
 extern void mem_use(void);      // 没有任何地方定义和引用该函数
@@ -152,7 +152,7 @@ void schedule(void)
 				}
             // 如果信号位图中除被阻塞的信号外还有其他信号，并且任务处于可中断状态，则
             // 置任务为就绪状态。其中'~(_BLOCKABLE & (*p)->blocked)'用于忽略被阻塞的信号，但
-            // SIGKILL 和SIGSTOP不能呗阻塞。
+            // SIGKILL 和SIGSTOP不能被阻塞。
 			if (((*p)->signal & ~(_BLOCKABLE & (*p)->blocked)) &&
 			(*p)->state==TASK_INTERRUPTIBLE)
 				(*p)->state=TASK_RUNNING;
